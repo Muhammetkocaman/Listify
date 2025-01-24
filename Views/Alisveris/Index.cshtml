@@ -1,0 +1,81 @@
+@model IEnumerable<web_uyg.Models.AlisverisUrunu>
+
+@{
+    ViewData["Title"] = "Alışveriş Listesi";
+}
+
+<div class="container">
+    <h2 class="mb-4">Alışveriş Listesi</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form asp-action="Index" method="get" class="form-inline">
+                <div class="input-group">
+                    <input type="text" name="aramaMetni" class="form-control" placeholder="Ürün ara...">
+                    <select name="filtre" class="form-control">
+                        <option value="">Tüm Ürünler</option>
+                        <option value="alinanlar">Alınan Ürünler</option>
+                        <option value="alinmayanlar">Alınmayan Ürünler</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Ara</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Ekle" class="btn btn-success">Yeni Ürün Ekle</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.UrunAdi)</th>
+                    <th>@Html.DisplayNameFor(model => model.Miktar)</th>
+                    <th>@Html.DisplayNameFor(model => model.AlındiMi)</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="@(item.AlındiMi ? "table-success" : "")">
+                        <td>@Html.DisplayFor(modelItem => item.UrunAdi)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Miktar)</td>
+                        <td>
+                            <form asp-action="DurumGuncelle" asp-route-id="@item.Id" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-sm @(item.AlındiMi ? "btn-success" : "btn-outline-success")">
+                                    @(item.AlındiMi ? "Alındı" : "Alınmadı")
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a asp-action="Duzenle" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Düzenle</a>
+                                <form asp-action="Sil" asp-route-id="@item.Id" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bu ürünü silmek istediğinizden emin misiniz?')">Sil</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col">
+            <form asp-action="ListeyiTemizle" method="post" style="display: inline;">
+                <input type="hidden" name="sadeceAlinanlar" value="true" />
+                <button type="submit" class="btn btn-warning" onclick="return confirm('Alınan ürünleri silmek istediğinizden emin misiniz?')">
+                    Alınan Ürünleri Temizle
+                </button>
+            </form>
+            <form asp-action="ListeyiTemizle" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Tüm listeyi temizlemek istediğinizden emin misiniz?')">
+                    Tüm Listeyi Temizle
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

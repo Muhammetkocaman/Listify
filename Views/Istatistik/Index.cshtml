@@ -1,0 +1,83 @@
+@model Dictionary<string, object>
+
+@{
+    ViewData["Title"] = "İstatistikler";
+}
+
+<div class="container">
+    <h2 class="mb-4">İstatistikler</h2>
+
+    <div class="row">
+        <!-- Genel İstatistikler -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Genel Durum</h5>
+                </div>
+                <div class="card-body">
+                    <p>Toplam Ürün: @Model["ToplamUrun"]</p>
+                    <p>Alınan Ürün: @Model["AlinanUrun"]</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: @(Model["AlinanUrunOrani"])%"
+                             aria-valuenow="@Model["AlinanUrunOrani"]" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            @(Math.Round((double)Model["AlinanUrunOrani"], 1))%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kategori Bazlı İstatistikler -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Kategori Bazlı Ürünler</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var kategori in (IEnumerable<dynamic>)Model["KategoriBazliUrunler"])
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @kategori.Ad
+                                <span class="badge bg-primary rounded-pill">@kategori.UrunSayisi</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- En Çok Eklenen Ürünler -->
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">En Çok Eklenen Ürünler</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Ürün Adı</th>
+                                    <th>Eklenme Sayısı</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var urun in (IEnumerable<dynamic>)Model["EnCokEklenenUrunler"])
+                                {
+                                    <tr>
+                                        <td>@urun.UrunAdi</td>
+                                        <td>@urun.Sayi</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+@model IEnumerable<web_uyg.Models.AlisverisUrunu>
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="container py-4">
+    <!-- Hoş Geldiniz Bölümü -->
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Alışveriş Listenizi Yönetin</h1>
+            <p class="col-md-8 fs-4">Kategorilere ayırın, favorilerinizi kaydedin ve alışverişlerinizi takip edin.</p>
+            <a class="btn btn-primary btn-lg" asp-controller="Alisveris" asp-action="Ekle">
+                <i class="fas fa-plus"></i> Yeni Ürün Ekle
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Özet İstatistikler -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-primary h-100">
+                <div class="card-body text-center">
+                    <h3 class="card-title">
+                        <i class="fas fa-shopping-cart text-primary mb-3" style="font-size: 2rem;"></i>
+                    </h3>
+                    <h5>Alışveriş Listesi</h5>
+                    <p class="display-6">@Model.Count()</p>
+                    <p class="text-muted">Toplam Ürün</p>
+                    <a asp-controller="Alisveris" asp-action="Index" class="btn btn-outline-primary">
+                        Listeye Git
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Son Eklenen Ürünler -->
+        <div class="col-md-8 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Son Eklenen Ürünler</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Ürün</th>
+                                        <th>Miktar</th>
+                                        <th>Durum</th>
+                                        <th>Tarih</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var urun in Model.Take(5))
+                                    {
+                                        <tr>
+                                            <td>@urun.UrunAdi</td>
+                                            <td>@urun.Miktar</td>
+                                            <td>
+                                                @if (urun.AlındiMi)
+                                                {
+                                                    <span class="badge bg-success">Alındı</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">Bekliyor</span>
+                                                }
+                                            </td>
+                                            <td>@urun.EklenmeTarihi.ToString("dd.MM.yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted mb-0">Henüz ürün eklenmemiş</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Özellikler -->
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-tags text-success mb-3" style="font-size: 2rem;"></i>
+                    <h5 class="card-title">Kategoriler</h5>
+                    <p class="card-text">Ürünlerinizi kategorilere ayırarak düzenli tutun.</p>
+                    <a asp-controller="Kategori" asp-action="Index" class="btn btn-outline-success">
+                        Kategorileri Yönet
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-star text-warning mb-3" style="font-size: 2rem;"></i>
+                    <h5 class="card-title">Favoriler</h5>
+                    <p class="card-text">Sık aldığınız ürünleri favorilere ekleyin.</p>
+                    <a asp-controller="Favori" asp-action="Index" class="btn btn-outline-warning">
+                        Favorilere Git
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-bar text-info mb-3" style="font-size: 2rem;"></i>
+                    <h5 class="card-title">İstatistikler</h5>
+                    <p class="card-text">Alışveriş alışkanlıklarınızı analiz edin.</p>
+                    <a asp-controller="Istatistik" asp-action="Index" class="btn btn-outline-info">
+                        İstatistikleri Gör
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Kartlar için hover efekti
+            $('.card').hover(
+                function() { $(this).addClass('shadow-lg').css('cursor', 'pointer'); },
+                function() { $(this).removeClass('shadow-lg'); }
+            );
+        });
+    </script>
+}

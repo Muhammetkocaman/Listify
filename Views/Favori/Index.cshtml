@@ -1,0 +1,59 @@
+@model IEnumerable<web_uyg.Models.FavoriUrun>
+
+@{
+    ViewData["Title"] = "Favori Ürünler";
+}
+
+<div class="container">
+    <h2 class="mb-4">Favori Ürünler</h2>
+
+    <div class="mb-3">
+        <a asp-action="Ekle" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Yeni Favori Ekle
+        </a>
+    </div>
+
+    <div class="row">
+        @foreach (var favori in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@favori.UrunAdi</h5>
+                        <p class="card-text">
+                            Varsayılan Miktar: @(favori.VarsayilanMiktar ?? 1)
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Eklenme: @favori.EklenmeTarihi.ToString("dd.MM.yyyy")</small>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <form asp-action="ListeyeEkle" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@favori.Id" />
+                            <button type="submit" class="btn btn-sm btn-success">
+                                <i class="fas fa-plus"></i> Listeye Ekle
+                            </button>
+                        </form>
+                        <form asp-action="Sil" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@favori.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Silmek istediğinize emin misiniz?')">
+                                <i class="fas fa-trash"></i> Sil
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.card').hover(
+                function() { $(this).addClass('shadow-lg').css('cursor', 'pointer'); },
+                function() { $(this).removeClass('shadow-lg'); }
+            );
+        });
+    </script>
+}
