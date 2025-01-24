@@ -1,4 +1,4 @@
-Youtube videosu için -->
+Youtube videosu için --> https://www.youtube.com/watch?v=BY0fYei3vGc
 
 # 🛒 Listify - Alışveriş Listesi Yönetim Uygulaması
 
