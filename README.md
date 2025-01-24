@@ -5,9 +5,9 @@ Youtube videosu için -->
 ## 📝 Proje Hakkında
 Listify, günlük alışveriş ihtiyaçlarınızı düzenli ve organize bir şekilde yönetmenizi sağlayan modern bir web uygulamasıdır. ASP.NET Core 9.0 teknolojisi ile geliştirilmiş olup, SQLite veritabanı kullanmaktadır.
 ## 📝 Hazırlayanlar
-Hüseyin Cevher Aslan(132130049)
-Muhammet Emin Kocaman(132130041)
-Meylis Charyev(132130121)
+- Hüseyin Cevher Aslan(132130049)
+- Muhammet Emin Kocaman(132130041)
+- Meylis Charyev(132130121)
 
 
 
