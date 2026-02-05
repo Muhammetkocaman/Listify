@@ -4,10 +4,11 @@
     ViewData["Title"] = "Kategoriler";
 }
 
-<div class="container">
+<div class="container py-4">
     <h2 class="mb-4">Kategoriler</h2>
+    <hr class="mb-4" />
 
-    <div class="mb-3">
+    <div class="mb-4">
         <a asp-action="Ekle" class="btn btn-primary">
             <i class="fas fa-plus"></i> Yeni Kategori Ekle
         </a>
@@ -25,10 +26,17 @@
                             <small class="text-muted">@kategori.Urunler.Count ürün</small>
                         </p>
                     </div>
-                    <div class="card-footer bg-transparent">
+                    <div class="card-footer bg-transparent d-flex gap-2 flex-wrap">
                         <a asp-action="Duzenle" asp-route-id="@kategori.Id" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit"></i> Düzenle
                         </a>
+                        <form asp-action="Sil" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@kategori.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bu kategoriyi silmek istediğinizden emin misiniz?')">
+                                <i class="fas fa-trash"></i> Sil
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

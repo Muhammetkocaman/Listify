@@ -12,7 +12,8 @@
             <form asp-action="Duzenle">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
-                
+                <input type="hidden" asp-for="ListeId" />
+
                 <div class="form-group mb-3">
                     <label asp-for="UrunAdi" class="control-label"></label>
                     <input asp-for="UrunAdi" class="form-control" />

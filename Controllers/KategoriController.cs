@@ -34,6 +34,7 @@ public class KategoriController : Controller
         {
             _context.Add(kategori);
             await _context.SaveChangesAsync();
+            TempData["Success"] = "Kategori başarıyla eklendi";
             return RedirectToAction(nameof(Index));
         }
         return View(kategori);
@@ -43,18 +44,20 @@ public class KategoriController : Controller
     {
         if (id == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Index));
         }
 
         var kategori = await _context.Kategoriler.FindAsync(id);
         if (kategori == null)
         {
-            return NotFound();
+            TempData["Error"] = "Kategori bulunamadı.";
+            return RedirectToAction(nameof(Index));
         }
         return View(kategori);
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Duzenle(int id, Kategori kategori)
     {
         if (id != kategori.Id)
@@ -68,6 +71,7 @@ public class KategoriController : Controller
             {
                 _context.Update(kategori);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Kategori başarıyla güncellendi";
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -83,5 +87,30 @@ public class KategoriController : Controller
             return RedirectToAction(nameof(Index));
         }
         return View(kategori);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Sil(int id)
+    {
+        var kategori = await _context.Kategoriler.FindAsync(id);
+        if (kategori == null)
+        {
+            TempData["Error"] = "Kategori bulunamadı";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var urunSayisi = await _context.AlisverisListesi.CountAsync(u => u.KategoriId == id);
+        if (urunSayisi > 0)
+        {
+            TempData["Error"] = $"Bu kategoride {urunSayisi} ürün var. Önce ürünleri başka kategoriye taşıyın.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        _context.Kategoriler.Remove(kategori);
+        await _context.SaveChangesAsync();
+        
+        TempData["Success"] = "Kategori başarıyla silindi";
+        return RedirectToAction(nameof(Index));
     }
 }

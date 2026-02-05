@@ -11,6 +11,7 @@ public class AlisverisListesiContext : DbContext
     }
 
     public DbSet<AlisverisUrunu> AlisverisListesi { get; set; }
+    public DbSet<AlisverisListesi> AlisverisListeler { get; set; }
     public DbSet<Kategori> Kategoriler { get; set; }
     public DbSet<FavoriUrun> FavoriUrunler { get; set; }
 
@@ -31,6 +32,18 @@ public class AlisverisListesiContext : DbContext
             .HasForeignKey(u => u.KategoriId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        modelBuilder.Entity<AlisverisUrunu>()
+            .HasOne(u => u.Liste)
+            .WithMany(l => l.Urunler)
+            .HasForeignKey(u => u.ListeId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AlisverisListesi>()
+            .HasIndex(l => l.VarsayilanMi);
+
+        modelBuilder.Entity<AlisverisUrunu>()
+            .HasIndex(u => new { u.ListeId, u.SiraNo });
+
         modelBuilder.Entity<Kategori>().HasData(
             new Kategori { Id = 1, Ad = "Meyve & Sebze", Aciklama = "Taze meyve ve sebzeler" },
             new Kategori { Id = 2, Ad = "Süt & Süt Ürünleri", Aciklama = "Süt, peynir, yoğurt vb." },
@@ -41,7 +54,6 @@ public class AlisverisListesiContext : DbContext
             new Kategori { Id = 7, Ad = "Kahvaltı", Aciklama = "Kahvaltı için gerekli ürünler" },
             new Kategori { Id = 8, Ad = "Yiyecek", Aciklama = "Yiyecek ürünleri" },
             new Kategori { Id = 9, Ad = "Süs Eşyası", Aciklama = "Süs eşyaları" }
-            
         );
     }
 }

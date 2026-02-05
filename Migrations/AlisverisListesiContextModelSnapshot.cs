@@ -15,7 +15,42 @@ namespace web_uyg.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
+
+            modelBuilder.Entity("web_uyg.Models.AlisverisListesi", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Aciklama")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Ad")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("OlusturulmaTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Renk")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("SonDegistirilmeTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("VarsayilanMi")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VarsayilanMi");
+
+                    b.ToTable("AlisverisListeler");
+                });
 
             modelBuilder.Entity("web_uyg.Models.AlisverisUrunu", b =>
                 {
@@ -29,7 +64,13 @@ namespace web_uyg.Migrations
                     b.Property<DateTime>("EklenmeTarihi")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("Fiyat")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("KategoriId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ListeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Miktar")
@@ -39,6 +80,15 @@ namespace web_uyg.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Not")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResimUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SiraNo")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("UrunAdi")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -47,6 +97,8 @@ namespace web_uyg.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("KategoriId");
+
+                    b.HasIndex("ListeId", "SiraNo");
 
                     b.ToTable("AlisverisListesi");
                 });
@@ -80,6 +132,7 @@ namespace web_uyg.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Aciklama")
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Ad")
@@ -115,6 +168,36 @@ namespace web_uyg.Migrations
                             Id = 4,
                             Aciklama = "Temizlik malzemeleri",
                             Ad = "Temizlik"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Aciklama = "Sıcak ve soğuk içecekler",
+                            Ad = "İçecek"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Aciklama = "Tatlı ve tatlı ürünler",
+                            Ad = "Tatlı"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Aciklama = "Kahvaltı için gerekli ürünler",
+                            Ad = "Kahvaltı"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Aciklama = "Yiyecek ürünleri",
+                            Ad = "Yiyecek"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Aciklama = "Süs eşyaları",
+                            Ad = "Süs Eşyası"
                         });
                 });
 
@@ -125,7 +208,20 @@ namespace web_uyg.Migrations
                         .HasForeignKey("KategoriId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("web_uyg.Models.AlisverisListesi", "Liste")
+                        .WithMany("Urunler")
+                        .HasForeignKey("ListeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Kategori");
+
+                    b.Navigation("Liste");
+                });
+
+            modelBuilder.Entity("web_uyg.Models.AlisverisListesi", b =>
+                {
+                    b.Navigation("Urunler");
                 });
 
             modelBuilder.Entity("web_uyg.Models.Kategori", b =>
